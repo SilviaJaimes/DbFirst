@@ -7,4 +7,5 @@ public partial class Driver : BaseEntity
     public int Age { get; set; }
 
     public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
+    public ICollection<TeamDriver> TeamDrivers { get; set; }
 }

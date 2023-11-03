@@ -18,24 +18,26 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
             .HasMaxLength(50)
             .HasColumnName("name");
 
-        builder.HasMany(d => d.Drivers).WithMany(p => p.Teams)
-            .UsingEntity<Dictionary<string, object>>(
-                "Teamdriver",
-                r => r.HasOne<Driver>().WithMany()
-                    .HasForeignKey("IdDriver")
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("IdDriver"),
-                l => l.HasOne<Team>().WithMany()
-                    .HasForeignKey("IdTeam")
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("IdTeam"),
+        builder
+            .HasMany(p => p.Drivers)
+            .WithMany(r => r.Teams)
+            .UsingEntity<TeamDriver>(
+
+                j => j
+                .HasOne(pt => pt.Driver)
+                .WithMany(t => t.TeamDrivers)
+                .HasForeignKey(ut => ut.IdDriver),
+
+
+                j => j
+                .HasOne(et => et.Team)
+                .WithMany(et => et.TeamDrivers)
+                .HasForeignKey(el => el.IdTeam),
+
                 j =>
                 {
-                    j.HasKey("IdTeam", "IdDriver")
-                        .HasName("PRIMARY")
-                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-                    j.ToTable("teamdriver");
-                    j.HasIndex(new[] { "IdDriver" }, "IdDriver_idx");
+                    j.ToTable("TeamDriver");
+                    j.HasKey(t => new { t.IdTeam, t.IdDriver });
                 });
     }    
 }

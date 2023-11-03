@@ -46,7 +46,7 @@ namespace Infrastructure.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "teamdriver",
+                name: "TeamDriver",
                 columns: table => new
                 {
                     IdTeam = table.Column<int>(type: "int", nullable: false),
@@ -54,18 +54,19 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.IdTeam, x.IdDriver })
-                        .Annotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                    table.PrimaryKey("PK_TeamDriver", x => new { x.IdTeam, x.IdDriver });
                     table.ForeignKey(
-                        name: "IdDriver",
+                        name: "FK_TeamDriver_driver_IdDriver",
                         column: x => x.IdDriver,
                         principalTable: "driver",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "IdTeam",
+                        name: "FK_TeamDriver_team_IdTeam",
                         column: x => x.IdTeam,
                         principalTable: "team",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -76,8 +77,8 @@ namespace Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IdDriver_idx",
-                table: "teamdriver",
+                name: "IX_TeamDriver_IdDriver",
+                table: "TeamDriver",
                 column: "IdDriver"); */
         }
 
@@ -85,7 +86,7 @@ namespace Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             /* migrationBuilder.DropTable(
-                name: "teamdriver");
+                name: "TeamDriver");
 
             migrationBuilder.DropTable(
                 name: "driver");

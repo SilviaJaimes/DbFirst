@@ -59,7 +59,7 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("team", (string)null);
                 });
 
-            modelBuilder.Entity("Teamdriver", b =>
+            modelBuilder.Entity("Core.Entities.TeamDriver", b =>
                 {
                     b.Property<int>("IdTeam")
                         .HasColumnType("int");
@@ -67,28 +67,40 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("IdDriver")
                         .HasColumnType("int");
 
-                    b.HasKey("IdTeam", "IdDriver")
-                        .HasName("PRIMARY")
-                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                    b.HasKey("IdTeam", "IdDriver");
 
-                    b.HasIndex(new[] { "IdDriver" }, "IdDriver_idx");
+                    b.HasIndex("IdDriver");
 
-                    b.ToTable("teamdriver", (string)null);
+                    b.ToTable("TeamDriver", (string)null);
                 });
 
-            modelBuilder.Entity("Teamdriver", b =>
+            modelBuilder.Entity("Core.Entities.TeamDriver", b =>
                 {
-                    b.HasOne("Core.Entities.Driver", null)
-                        .WithMany()
+                    b.HasOne("Core.Entities.Driver", "Driver")
+                        .WithMany("TeamDrivers")
                         .HasForeignKey("IdDriver")
-                        .IsRequired()
-                        .HasConstraintName("IdDriver");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Core.Entities.Team", null)
-                        .WithMany()
+                    b.HasOne("Core.Entities.Team", "Team")
+                        .WithMany("TeamDrivers")
                         .HasForeignKey("IdTeam")
-                        .IsRequired()
-                        .HasConstraintName("IdTeam");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Core.Entities.Driver", b =>
+                {
+                    b.Navigation("TeamDrivers");
+                });
+
+            modelBuilder.Entity("Core.Entities.Team", b =>
+                {
+                    b.Navigation("TeamDrivers");
                 });
 #pragma warning restore 612, 618
         }

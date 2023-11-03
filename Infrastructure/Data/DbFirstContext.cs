@@ -21,6 +21,8 @@ public partial class DbFirstContext : DbContext
 
     public virtual DbSet<Team> Teams { get; set; }
 
+    public virtual DbSet<TeamDriver> TeamDrivers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
